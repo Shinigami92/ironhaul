@@ -168,16 +168,14 @@ func _spawn_enemies() -> void:
 		Vector3(2, 0.2, -18),
 		Vector3(-10, 0.2, -5),
 	]
-	var grunt_script: Script = preload("res://scripts/enemy/grunt.gd")
 	for pos in positions:
-		var grunt: CharacterBody3D = grunt_script.new()
+		var grunt: CharacterBody3D = preload("res://scripts/enemy/grunt.gd").new()
 		grunt.position = pos
 		add_child(grunt)
 
 
 func _spawn_hud() -> void:
-	var hud_script: Script = preload("res://scripts/ui/hud.gd")
-	var hud: CanvasLayer = hud_script.new()
+	var hud: CanvasLayer = preload("res://scripts/ui/hud.gd").new()
 	add_child(hud)
 
 

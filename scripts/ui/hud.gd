@@ -54,7 +54,10 @@ func _build_ui() -> void:
 	hint_label = Label.new()
 	hint_label.position = Vector2(0, 112)
 	hint_label.add_theme_color_override("font_color", Color(0.7, 0.8, 0.85))
-	hint_label.text = "WASD move  ·  SPACE thrust  ·  SHIFT dodge  ·  LMB/RMB fire  ·  E interact  ·  ESC free mouse"
+	hint_label.text = (
+		"WASD move  ·  SPACE thrust  ·  SHIFT dodge  ·  "
+		+ "LMB/RMB fire  ·  E interact  ·  ESC free mouse"
+	)
 	panel.add_child(hint_label)
 
 
@@ -98,13 +101,18 @@ func _on_died() -> void:
 
 
 func _on_materials_changed(inventory: Dictionary) -> void:
-	materials_label.text = "Scrap: %d    Ore: %d" % [
-		inventory.get("scrap", 0),
-		inventory.get("ore", 0),
-	]
+	materials_label.text = (
+		"Scrap: %d    Ore: %d"
+		% [
+			inventory.get("scrap", 0),
+			inventory.get("ore", 0),
+		]
+	)
 
 
-class CrosshairControl extends Control:
+class CrosshairControl:
+	extends Control
+
 	func _draw() -> void:
 		var center := size / 2
 		var color := Color(0.4, 0.9, 0.85, 0.85)
