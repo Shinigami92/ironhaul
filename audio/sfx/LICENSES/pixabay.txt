@@ -1,0 +1,33 @@
+Audio assets in this directory are sourced from Pixabay under the Pixabay Content License:
+<https://pixabay.com/service/license-summary/>
+
+Summary of what this license permits (as of 2026-04-24):
+
+  - Free for commercial and non-commercial use.
+  - Attribution is not required (but appreciated; see ATTRIBUTIONS.md at the
+    project root for courtesy credits).
+  - Modifications are allowed.
+  - Redistribution is allowed as part of a derivative work — e.g. bundling the
+    audio inside a game is fine. This is why the files can live in the Ironhaul
+    OSS repo.
+
+Key restriction that does NOT apply to us:
+
+  - You cannot sell or redistribute the unaltered audio file by itself as a
+    standalone product. We distribute audio only as part of the game.
+
+See https://pixabay.com/service/terms/ for the full terms.
+
+================================================================
+
+Files sourced from Pixabay used in this project (current project path — original Pixabay filename in parens):
+
+  - audio/sfx/movement/footstep.mp3              (universfield-heavy-walking-footsteps-352771.mp3)
+      Title:  "Film Special Effects - Heavy Walking Footsteps"
+      Author: universfield
+      Source: https://pixabay.com/sound-effects/film-special-effects-heavy-walking-footsteps-352771/
+
+  - audio/sfx/movement/thruster_loop.mp3         (thestoryrug-continuous-bass-rumble-336529.mp3)
+      Title:  "Horror Continuous Bass Rumble"
+      Author: thestoryrug
+      Source: https://pixabay.com/sound-effects/horror-continuous-bass-rumble-336529/
