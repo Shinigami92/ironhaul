@@ -4,6 +4,7 @@ extends Mech
 enum AIState { PATROL, ENGAGE, RETREAT }
 
 const ENEMY_FIRE_COLOR: Color = Color(1.0, 0.35, 0.25)  # hot red
+const SCRAP_PICKUP_SCRIPT := preload("res://scripts/pickups/scrap_pickup.gd")
 
 @export var detection_range: float = 35.0
 @export var engage_range: float = 22.0
@@ -144,6 +145,27 @@ func _attempt_attack() -> void:
 
 
 func _on_died() -> void:
-	GameState.add_material("scrap", 10)
-	GameState.add_material("ore", randi_range(0, 3))
+	_spawn_loot_pickups()
 	queue_free()
+
+
+func _spawn_loot_pickups() -> void:
+	var world := get_tree().current_scene
+	if world == null:
+		return
+
+	var scrap: ScrapPickup = SCRAP_PICKUP_SCRIPT.new()
+	scrap.material_kind = "scrap"
+	scrap.amount = 10
+	scrap.tint = Color(0.4, 1.0, 0.4)
+	scrap.position = global_position + Vector3.UP * 1.0
+	world.add_child(scrap)
+
+	var ore_amount := randi_range(0, 3)
+	if ore_amount > 0:
+		var ore: ScrapPickup = SCRAP_PICKUP_SCRIPT.new()
+		ore.material_kind = "ore"
+		ore.amount = ore_amount
+		ore.tint = Color(0.5, 0.7, 1.0)
+		ore.position = global_position + Vector3.UP * 1.0 + Vector3(1.0, 0, 0)
+		world.add_child(ore)
