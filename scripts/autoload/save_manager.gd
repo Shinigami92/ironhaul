@@ -1,7 +1,7 @@
 extends Node
 
-signal save_completed()
-signal load_completed()
+signal save_completed
+signal load_completed
 
 const SAVE_PATH: String = "user://ironhaul_save.json"
 

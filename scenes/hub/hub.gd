@@ -24,13 +24,16 @@ func _process(_delta: float) -> void:
 
 
 func _build_environment() -> void:
-	_make_static_box(Vector3(HUB_SIZE, 1, HUB_SIZE), Vector3(0, -0.5, 0), Color(0.28, 0.30, 0.32))
-	_make_static_box(Vector3(HUB_SIZE, 1, HUB_SIZE), Vector3(0, HUB_HEIGHT + 0.5, 0), Color(0.16, 0.17, 0.19))
+	var h := HUB_HEIGHT
+	var s := HUB_SIZE
+	var half := s * 0.5
 	var wall_color := Color(0.36, 0.38, 0.42)
-	_make_static_box(Vector3(HUB_SIZE, HUB_HEIGHT, 1), Vector3(0, HUB_HEIGHT * 0.5, -HUB_SIZE * 0.5), wall_color)
-	_make_static_box(Vector3(HUB_SIZE, HUB_HEIGHT, 1), Vector3(0, HUB_HEIGHT * 0.5, HUB_SIZE * 0.5), wall_color)
-	_make_static_box(Vector3(1, HUB_HEIGHT, HUB_SIZE), Vector3(-HUB_SIZE * 0.5, HUB_HEIGHT * 0.5, 0), wall_color)
-	_make_static_box(Vector3(1, HUB_HEIGHT, HUB_SIZE), Vector3(HUB_SIZE * 0.5, HUB_HEIGHT * 0.5, 0), wall_color)
+	_make_static_box(Vector3(s, 1, s), Vector3(0, -0.5, 0), Color(0.28, 0.30, 0.32))
+	_make_static_box(Vector3(s, 1, s), Vector3(0, h + 0.5, 0), Color(0.16, 0.17, 0.19))
+	_make_static_box(Vector3(s, h, 1), Vector3(0, h * 0.5, -half), wall_color)
+	_make_static_box(Vector3(s, h, 1), Vector3(0, h * 0.5, half), wall_color)
+	_make_static_box(Vector3(1, h, s), Vector3(-half, h * 0.5, 0), wall_color)
+	_make_static_box(Vector3(1, h, s), Vector3(half, h * 0.5, 0), wall_color)
 
 
 func _build_lighting() -> void:
@@ -110,8 +113,7 @@ func _spawn_player() -> void:
 
 
 func _spawn_hud() -> void:
-	var hud_script: Script = preload("res://scripts/ui/hud.gd")
-	var hud: CanvasLayer = hud_script.new()
+	var hud: CanvasLayer = preload("res://scripts/ui/hud.gd").new()
 	add_child(hud)
 
 
