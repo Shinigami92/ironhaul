@@ -17,7 +17,7 @@ func _ready() -> void:
 
 
 func _build_ui() -> void:
-	crosshair = _CrosshairControl.new()
+	crosshair = CrosshairControl.new()
 	crosshair.set_anchors_preset(Control.PRESET_FULL_RECT)
 	crosshair.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(crosshair)
@@ -104,7 +104,7 @@ func _on_materials_changed(inventory: Dictionary) -> void:
 	]
 
 
-class _CrosshairControl extends Control:
+class CrosshairControl extends Control:
 	func _draw() -> void:
 		var center := size / 2
 		var color := Color(0.4, 0.9, 0.85, 0.85)
