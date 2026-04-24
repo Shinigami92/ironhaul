@@ -3,6 +3,8 @@ extends Mech
 
 enum AIState { PATROL, ENGAGE, RETREAT }
 
+const ENEMY_FIRE_COLOR: Color = Color(1.0, 0.35, 0.25)  # hot red
+
 @export var detection_range: float = 35.0
 @export var engage_range: float = 22.0
 @export var retreat_health_frac: float = 0.25
@@ -128,9 +130,15 @@ func _attempt_attack() -> void:
 	query.exclude = [get_rid()]
 	var hit := space.intersect_ray(query)
 	_attack_timer = attack_interval
-	if hit.is_empty():
-		return
-	var collider: Object = hit.get("collider")
+
+	var hit_pos: Vector3 = target
+	var collider: Object = null
+	if not hit.is_empty():
+		hit_pos = hit["position"]
+		collider = hit.get("collider")
+
+	WeaponVFX.spawn_shot_effects(self, hit_pos, not hit.is_empty(), ENEMY_FIRE_COLOR)
+
 	if collider == player and collider.has_method("take_damage"):
 		collider.take_damage(attack_damage)
 

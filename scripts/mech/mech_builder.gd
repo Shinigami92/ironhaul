@@ -34,24 +34,27 @@ static func _add_collision(target: CharacterBody3D) -> void:
 
 
 static func _add_legs(target: CharacterBody3D, mat: Material) -> void:
+	# Godot convention: -Z is forward. Toes point to -Z.
 	for x_offset in [-0.45, 0.45]:
 		var leg := _make_box(Vector3(0.6, 1.5, 0.7), Vector3(x_offset, 0.9, 0), mat)
 		target.add_child(leg)
-		var foot := _make_box(Vector3(0.8, 0.2, 1.1), Vector3(x_offset, 0.1, 0.1), mat)
+		var foot := _make_box(Vector3(0.8, 0.2, 1.1), Vector3(x_offset, 0.1, -0.1), mat)
 		target.add_child(foot)
 
 
 static func _add_torso(target: CharacterBody3D, body_mat: Material, accent_mat: Material) -> void:
 	var torso := _make_box(Vector3(1.7, 1.4, 1.0), Vector3(0, 2.35, 0), body_mat)
 	target.add_child(torso)
-	var chest_plate := _make_box(Vector3(1.2, 0.8, 0.15), Vector3(0, 2.5, 0.55), accent_mat)
+	# Chest plate on the front face (-Z side) of the torso.
+	var chest_plate := _make_box(Vector3(1.2, 0.8, 0.15), Vector3(0, 2.5, -0.55), accent_mat)
 	target.add_child(chest_plate)
 
 
 static func _add_head(target: CharacterBody3D, mat: Material) -> void:
 	var neck := _make_box(Vector3(0.4, 0.3, 0.4), Vector3(0, 3.1, 0), mat)
 	target.add_child(neck)
-	var head := _make_box(Vector3(0.8, 0.55, 0.7), Vector3(0, 3.4, 0.05), mat)
+	# Slight forward-lean of the head.
+	var head := _make_box(Vector3(0.8, 0.55, 0.7), Vector3(0, 3.4, -0.05), mat)
 	target.add_child(head)
 
 
@@ -61,7 +64,9 @@ static func _add_arms(target: CharacterBody3D, body_mat: Material, accent_mat: M
 		target.add_child(shoulder)
 		var arm := _make_box(Vector3(0.45, 1.1, 0.45), Vector3(side_x, 2.0, 0), body_mat)
 		target.add_child(arm)
-		var barrel := _make_cylinder(0.14, 1.2, Vector3(side_x, 2.0, 0.9), accent_mat)
+		# Barrels mounted forward of the arms. _make_cylinder's -90° X rotation
+		# aligns the cylinder along -Z so the muzzle tip ends up further forward.
+		var barrel := _make_cylinder(0.14, 1.2, Vector3(side_x, 2.0, -0.9), accent_mat)
 		target.add_child(barrel)
 
 

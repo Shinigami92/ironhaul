@@ -1,5 +1,8 @@
 extends Node
 
+const PRIMARY_COLOR: Color = Color(1.0, 0.75, 0.3)  # warm orange
+const SECONDARY_COLOR: Color = Color(0.45, 0.8, 1.0)  # cold cyan
+
 @export var primary_damage: float = 8.0
 @export var primary_fire_rate: float = 4.0
 @export var primary_heat_per_shot: float = 11.0
@@ -27,27 +30,32 @@ func _process(delta: float) -> void:
 	if not mech.can_fire() or mech.camera == null:
 		return
 	if Input.is_action_pressed("fire_primary") and _primary_cooldown <= 0.0:
-		_fire_shot(primary_damage, primary_heat_per_shot)
+		_fire_shot(primary_damage, primary_heat_per_shot, PRIMARY_COLOR)
 		_primary_cooldown = 1.0 / primary_fire_rate
 	if Input.is_action_just_pressed("fire_secondary"):
-		_fire_shot(secondary_damage, secondary_heat_per_shot)
+		_fire_shot(secondary_damage, secondary_heat_per_shot, SECONDARY_COLOR)
 
 
-func _fire_shot(damage: float, heat_cost: float) -> void:
+func _fire_shot(damage: float, heat_cost: float, color: Color) -> void:
 	var cam := mech.camera
 	var origin := cam.global_position
 	var forward := -cam.global_transform.basis.z
-	var target := origin + forward * max_range
+	var max_target := origin + forward * max_range
 
 	var space := mech.get_world_3d().direct_space_state
-	var query := PhysicsRayQueryParameters3D.create(origin, target)
+	var query := PhysicsRayQueryParameters3D.create(origin, max_target)
 	query.exclude = [mech.get_rid()]
 	var hit := space.intersect_ray(query)
 
 	mech.apply_heat(heat_cost)
 
-	if hit.is_empty():
-		return
-	var collider: Object = hit.get("collider")
+	var hit_pos: Vector3 = max_target
+	var collider: Object = null
+	if not hit.is_empty():
+		hit_pos = hit["position"]
+		collider = hit.get("collider")
+
+	WeaponVFX.spawn_shot_effects(mech, hit_pos, not hit.is_empty(), color)
+
 	if collider != null and collider.has_method("take_damage"):
 		collider.take_damage(damage)

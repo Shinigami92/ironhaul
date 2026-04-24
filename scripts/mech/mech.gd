@@ -8,6 +8,12 @@ signal overheated
 signal cooled
 signal died
 
+# Barrel offsets in mech-local space. Godot convention: -Z is forward, so
+# barrels sit in front of the torso. Must stay in sync with MechBuilder._add_arms,
+# which places arm barrels at (±1.15, 2.0, -0.9).
+const BARREL_LOCAL_LEFT: Vector3 = Vector3(-1.15, 2.0, -0.9)
+const BARREL_LOCAL_RIGHT: Vector3 = Vector3(1.15, 2.0, -0.9)
+
 @export var max_health: float = 100.0
 @export var max_heat: float = 100.0
 @export var max_thrust: float = 100.0
@@ -30,6 +36,7 @@ var movement: Node
 var weapon: Node
 
 var _thrust_regen_delay: float = 0.0
+var _next_barrel_left: bool = true
 
 
 func _ready() -> void:
@@ -89,6 +96,13 @@ func can_fire() -> bool:
 	return not is_dead and not is_overheated
 
 
+func take_next_barrel_offset() -> Vector3:
+	# Alternates left/right each call so both arms visibly fire over a burst.
+	var offset := BARREL_LOCAL_LEFT if _next_barrel_left else BARREL_LOCAL_RIGHT
+	_next_barrel_left = not _next_barrel_left
+	return offset
+
+
 func consume_thrust(amount: float) -> bool:
 	# Attempting to thrust — successful or not — always resets the regen delay.
 	# Otherwise an empty tank regens while the button is still held, producing
@@ -104,7 +118,10 @@ func consume_thrust(amount: float) -> bool:
 func _setup_camera() -> void:
 	camera = Camera3D.new()
 	camera.name = "Camera"
-	camera.position = Vector3(0, 3.0, 0.2)
+	# Just above the torso top and slightly forward of the chest plate so the
+	# mech's own body is below/behind the view frustum. A proper cockpit mesh
+	# in v0.2 will take over this placement.
+	camera.position = Vector3(0, 3.2, -0.6)
 	camera.current = true
 	add_child(camera)
 
