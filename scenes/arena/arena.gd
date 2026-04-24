@@ -2,11 +2,14 @@ extends Node3D
 
 const ARENA_SIZE: float = 80.0
 const RETURN_ZONE_POS: Vector3 = Vector3(0, 0.3, 36.0)
+const KILL_PLANE_Y: float = -20.0
+const RESPAWN_DELAY_SEC: float = 2.0
 
 var player: Mech
 var return_area: Area3D
 var return_label: Label3D
 var player_in_return: bool = false
+var _respawn_triggered: bool = false
 
 
 func _ready() -> void:
@@ -15,6 +18,7 @@ func _ready() -> void:
 	_build_cover()
 	_build_return_zone()
 	_spawn_player()
+	player.died.connect(_on_player_died)
 	_spawn_enemies()
 	_spawn_hud()
 
@@ -23,6 +27,23 @@ func _process(_delta: float) -> void:
 	if player_in_return and Input.is_action_just_pressed("interact"):
 		SaveManager.save_game()
 		SceneManager.go_to_hub()
+	_check_kill_plane()
+
+
+func _check_kill_plane() -> void:
+	if player == null or player.is_dead:
+		return
+	if player.global_position.y < KILL_PLANE_Y:
+		# Overkill guarantees the died signal fires regardless of max_health tuning.
+		player.take_damage(player.max_health * 10.0)
+
+
+func _on_player_died() -> void:
+	if _respawn_triggered:
+		return
+	_respawn_triggered = true
+	await get_tree().create_timer(RESPAWN_DELAY_SEC).timeout
+	SceneManager.go_to_hub()
 
 
 func _build_ground() -> void:
