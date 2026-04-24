@@ -33,3 +33,24 @@ jobs:
 
       - name: Check formatting
         run: gdformat --check .
+
+  gut:
+    name: GUT
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Setup Godot
+        uses: chickensoft-games/setup-godot@f166999204a4f2722c6fe042fbaa3b3ea0d9c789 # v2.4.1
+        with:
+          version: "4.6.2"
+          use-dotnet: false
+
+      # Build Godot's class_name registry in .godot/ — without this, GUT bails
+      # out because GutTest and friends aren't registered.
+      - name: Import project
+        run: godot --headless --import
+
+      - name: Run GUT
+        run: godot --headless -s addons/gut/gut_cmdln.gd -gdir=res://tests -ginclude_subdirs -gexit
