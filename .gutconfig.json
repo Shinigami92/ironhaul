@@ -1,0 +1,5 @@
+{
+  "dirs": ["res://tests"],
+  "configured_dirs": ["res://tests"],
+  "include_subdirs": true
+}

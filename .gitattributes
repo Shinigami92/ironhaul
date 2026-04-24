@@ -1,4 +1,8 @@
 # Normalize EOL for all files that Git considers text files.
 * text=auto eol=lf
+
+# Treat third-party addons as vendored so GitHub's language stats and
+# PR diff view exclude them. Git/Godot/CI are unaffected.
+addons/** linguist-vendored=true
 *.mp3 filter=lfs diff=lfs merge=lfs -text
 *.ogg filter=lfs diff=lfs merge=lfs -text

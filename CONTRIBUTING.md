@@ -71,6 +71,24 @@ gdformat --check .
 gdlint .
 ```
 
+The `addons/` folder (GUT and any other third-party addons) is excluded via the repo's `gdlintrc` and `gdformatrc` config files — third-party code doesn't need to match our style rules. Add new directories to `excluded_directories` in both files if you ever need to exclude another.
+
+### Running tests
+
+Tests use [GUT (Godot Unit Test)](https://github.com/bitwes/Gut). The addon lives in `addons/gut/` and is enabled by default in `project.godot`. Test files live under `tests/` (convention: `tests/unit/test_<subject>.gd`).
+
+**In the Godot editor:** open the GUT panel at the bottom of the editor → click *Run All*.
+
+**From the terminal:**
+
+```bash
+"$GODOT4_EDITOR" --headless -s addons/gut/gut_cmdln.gd -gdir=res://tests -ginclude_subdirs -gexit
+```
+
+Replace `$GODOT4_EDITOR` with the full path to your Godot 4.6 executable if the env var isn't set (see [Editor setup](#editor-setup)).
+
+CI runs the same invocation on every push and pull request — PRs with failing tests are blocked.
+
 We currently rely on gdtoolkit's defaults (no `.gdlintrc` in the repo). When a default rule actively hurts us, add a `.gdlintrc` at the project root and override the rule there — don't disable rules per file.
 
 Optional editor integration:
