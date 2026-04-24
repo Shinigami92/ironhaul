@@ -13,6 +13,21 @@ const MUZZLE_RADIUS: float = 0.25
 const IMPACT_RADIUS: float = 0.3
 
 
+# High-level helper: spawns muzzle + tracer (+ impact when the ray connected)
+# for a single shot fired from `shooter`. Barrels alternate left/right per call.
+static func spawn_shot_effects(
+	shooter: Mech, end_pos: Vector3, did_hit: bool, color: Color
+) -> void:
+	var world := shooter.get_tree().current_scene
+	if world == null:
+		return
+	var barrel_world := shooter.to_global(shooter.take_next_barrel_offset())
+	spawn_muzzle_flash(world, barrel_world, color)
+	spawn_tracer(world, barrel_world, end_pos, color)
+	if did_hit:
+		spawn_impact(world, end_pos, color)
+
+
 static func spawn_tracer(world: Node, from_pos: Vector3, to_pos: Vector3, color: Color) -> void:
 	var distance := from_pos.distance_to(to_pos)
 	if distance < 0.01:
