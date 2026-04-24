@@ -47,11 +47,11 @@ func _physics_process(delta: float) -> void:
 				ai_state = AIState.ENGAGE
 		AIState.ENGAGE:
 			_engage(delta)
-			if current_health / max_health < retreat_health_frac:
+			if health.current / health.maximum < retreat_health_frac:
 				ai_state = AIState.RETREAT
 		AIState.RETREAT:
 			_retreat(delta)
-			if current_health / max_health > retreat_health_frac + 0.15:
+			if health.current / health.maximum > retreat_health_frac + 0.15:
 				ai_state = AIState.ENGAGE
 
 

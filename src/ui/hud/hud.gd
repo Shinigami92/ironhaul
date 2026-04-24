@@ -69,9 +69,9 @@ func _find_and_connect_player() -> void:
 	player.overheated.connect(_on_overheated)
 	player.cooled.connect(_on_cooled)
 	player.died.connect(_on_died)
-	_on_health_changed(player.current_health, player.max_health)
-	_on_heat_changed(player.current_heat, player.max_heat)
-	_on_thrust_changed(player.current_thrust, player.max_thrust)
+	_on_health_changed(player.health.current, player.health.maximum)
+	_on_heat_changed(player.heat.current, player.heat.maximum)
+	_on_thrust_changed(player.thrust.current, player.thrust.maximum)
 
 
 func _on_health_changed(current: float, max_value: float) -> void:
