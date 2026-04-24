@@ -2,6 +2,7 @@ extends Node3D
 
 const HUB_SIZE: float = 30.0
 const HUB_HEIGHT: float = 14.0
+const MECH_SCENE := preload("res://src/mech/mech.tscn")
 
 var player: Mech
 var terminal_area: Area3D
@@ -106,7 +107,7 @@ func _on_terminal_exit(body: Node) -> void:
 
 
 func _spawn_player() -> void:
-	player = Mech.new()
+	player = MECH_SCENE.instantiate()
 	player.is_enemy = false
 	player.position = Vector3(0, 0.1, HUB_SIZE * 0.5 - 4.0)
 	add_child(player)

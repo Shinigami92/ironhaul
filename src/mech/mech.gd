@@ -33,11 +33,14 @@ var heat: Heat
 var thrust: Thrust
 var is_dead: bool = false
 
-var camera: Camera3D
-var movement: Node
-var weapon: Node
-
 var _next_barrel_left: bool = true
+
+# Authored children from mech.tscn. `get_node_or_null` so bare `Mech.new()`
+# (tests, enemy AI paths that don't instantiate the full scene) doesn't crash;
+# downstream code already null-checks `mech.camera` etc.
+@onready var camera: Camera3D = get_node_or_null("Camera")
+@onready var movement: Node = get_node_or_null("Movement")
+@onready var weapon: Node = get_node_or_null("Weapon")
 
 
 func _ready() -> void:
@@ -59,8 +62,6 @@ func _ready() -> void:
 		add_to_group("enemy_mech")
 	else:
 		add_to_group("player_mech")
-		_setup_camera()
-	_attach_components()
 
 
 func _process(delta: float) -> void:
@@ -98,25 +99,3 @@ func take_next_barrel_offset() -> Vector3:
 func _on_health_depleted() -> void:
 	is_dead = true
 	died.emit()
-
-
-func _setup_camera() -> void:
-	camera = Camera3D.new()
-	camera.name = "Camera"
-	# Just above the torso top and slightly forward of the chest plate so the
-	# mech's own body is below/behind the view frustum. A proper cockpit mesh
-	# in v0.2 will take over this placement.
-	camera.position = Vector3(0, 3.2, -0.6)
-	camera.current = true
-	add_child(camera)
-
-
-func _attach_components() -> void:
-	if is_enemy:
-		return
-	movement = preload("res://src/mech/movement.gd").new()
-	movement.name = "Movement"
-	add_child(movement)
-	weapon = preload("res://src/mech/weapon.gd").new()
-	weapon.name = "Weapon"
-	add_child(weapon)
