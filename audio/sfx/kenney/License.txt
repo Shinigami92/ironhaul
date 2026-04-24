@@ -1,0 +1,29 @@
+Audio assets in this directory come from two Kenney packs, both released under Creative Commons Zero (CC0):
+<http://creativecommons.org/publicdomain/zero/1.0/>
+
+================================================================
+Sci-Fi Sounds (1.0)
+Created/distributed by Kenney (www.kenney.nl)
+Creation date: 11-10-2020
+Source: https://kenney.nl/assets/sci-fi-sounds
+
+Files used from this pack:
+- laserSmall_000.ogg
+- laserLarge_000.ogg
+- laserRetro_000.ogg
+- impactMetal_000.ogg
+- lowFrequency_explosion_001.ogg
+
+================================================================
+Impact Sounds (1.0)
+Created/distributed by Kenney (www.kenney.nl)
+Creation date: 19-12-2019
+Source: https://kenney.nl/assets/impact-sounds
+
+(No files from this pack currently in use. Retained for reference.)
+
+================================================================
+
+CC0 makes crediting optional, but we do so gladly. Support Kenney:
+  Donate:   http://support.kenney.nl
+  Patreon:  http://patreon.com/kenney/

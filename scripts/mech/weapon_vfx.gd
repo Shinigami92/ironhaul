@@ -12,6 +12,25 @@ const TRACER_RADIUS: float = 0.03
 const MUZZLE_RADIUS: float = 0.25
 const IMPACT_RADIUS: float = 0.3
 
+const IMPACT_SOUND: AudioStream = preload("res://audio/sfx/kenney/impactMetal_000.ogg")
+
+
+# Plays a one-shot positional sound at `pos`. Spawns a temporary
+# AudioStreamPlayer3D as a child of `world`, plays, and auto-frees on finish.
+# No-op if `stream` is null (e.g. audio file not yet installed).
+static func play_one_shot_3d(
+	world: Node, pos: Vector3, stream: AudioStream, volume_db: float = 0.0
+) -> void:
+	if stream == null or world == null:
+		return
+	var player := AudioStreamPlayer3D.new()
+	player.stream = stream
+	player.volume_db = volume_db
+	world.add_child(player)
+	player.global_position = pos
+	player.play()
+	player.finished.connect(player.queue_free)
+
 
 # High-level helper: spawns muzzle + tracer (+ impact when the ray connected)
 # for a single shot fired from `shooter`. Barrels alternate left/right per call.
