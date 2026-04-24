@@ -1,0 +1,28 @@
+Audio assets originating from Kenney packs, released under Creative Commons Zero (CC0):
+<http://creativecommons.org/publicdomain/zero/1.0/>
+
+================================================================
+Sci-Fi Sounds (1.0)
+Created/distributed by Kenney (www.kenney.nl)
+Creation date: 11-10-2020
+Source: https://kenney.nl/assets/sci-fi-sounds
+
+Files used from this pack (current project path — original Kenney filename in parens):
+- audio/sfx/weapons/primary_fire.ogg          (laserSmall_000.ogg)
+- audio/sfx/weapons/secondary_fire.ogg        (laserLarge_000.ogg)
+- audio/sfx/weapons/enemy_fire.ogg            (laserRetro_000.ogg)
+- audio/sfx/weapons/impact.ogg                (impactMetal_000.ogg)
+- audio/sfx/movement/thruster_burst.ogg       (lowFrequency_explosion_001.ogg)
+
+================================================================
+Impact Sounds (1.0) — not currently used
+Source: https://kenney.nl/assets/impact-sounds
+
+No files from this pack are currently in use. The reference remains in case
+contributors add impact sounds from it later.
+
+================================================================
+
+CC0 makes crediting optional, but we do so gladly. Support Kenney:
+  Donate:   http://support.kenney.nl
+  Patreon:  http://patreon.com/kenney/
