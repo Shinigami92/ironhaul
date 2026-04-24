@@ -1,0 +1,68 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://src/ui/hud/hud.gd" id="1_hud"]
+[ext_resource type="Script" path="res://src/ui/hud/crosshair.gd" id="2_crosshair"]
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_hud")
+
+[node name="Crosshair" type="Control" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_crosshair")
+
+[node name="StatusPanel" type="Control" parent="."]
+offset_left = 24.0
+offset_top = 24.0
+offset_right = 24.0
+offset_bottom = 24.0
+
+[node name="HealthBar" type="ProgressBar" parent="StatusPanel"]
+unique_name_in_owner = true
+modulate = Color(0.45, 1, 0.55, 1)
+offset_right = 260.0
+offset_bottom = 20.0
+max_value = 100.0
+show_percentage = false
+
+[node name="HeatBar" type="ProgressBar" parent="StatusPanel"]
+unique_name_in_owner = true
+modulate = Color(1, 0.55, 0.3, 1)
+offset_top = 28.0
+offset_right = 260.0
+offset_bottom = 48.0
+max_value = 100.0
+show_percentage = false
+
+[node name="ThrustBar" type="ProgressBar" parent="StatusPanel"]
+unique_name_in_owner = true
+modulate = Color(0.5, 0.8, 1, 1)
+offset_top = 56.0
+offset_right = 260.0
+offset_bottom = 76.0
+max_value = 100.0
+show_percentage = false
+
+[node name="StatusLabel" type="Label" parent="StatusPanel"]
+unique_name_in_owner = true
+theme_override_colors/font_color = Color(1, 0.55, 0.25, 1)
+offset_top = 84.0
+offset_right = 260.0
+offset_bottom = 110.0
+
+[node name="MaterialsLabel" type="Label" parent="StatusPanel"]
+unique_name_in_owner = true
+offset_top = 112.0
+offset_right = 260.0
+offset_bottom = 138.0
+
+[node name="HintLabel" type="Label" parent="StatusPanel"]
+theme_override_colors/font_color = Color(0.7, 0.8, 0.85, 1)
+offset_top = 140.0
+offset_right = 800.0
+offset_bottom = 166.0
+text = "WASD move  ·  SPACE thrust  ·  SHIFT dodge  ·  LMB/RMB fire  ·  E interact  ·  ESC free mouse"

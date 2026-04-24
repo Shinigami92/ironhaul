@@ -95,7 +95,7 @@ const ENEMY_SPAWN_POINTS: Array[Vector3] = [
 ]
 
 const GRUNT_SCRIPT := preload("res://src/enemy/grunt/grunt.gd")
-const HUD_SCRIPT := preload("res://src/ui/hud/hud.gd")
+const HUD_SCENE := preload("res://src/ui/hud/hud.tscn")
 
 var player: Mech
 var return_area: Area3D
@@ -308,7 +308,7 @@ func _spawn_player() -> void:
 
 
 func _spawn_hud() -> void:
-	var hud: CanvasLayer = HUD_SCRIPT.new()
+	var hud: CanvasLayer = HUD_SCENE.instantiate()
 	add_child(hud)
 
 
