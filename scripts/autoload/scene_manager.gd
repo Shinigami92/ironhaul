@@ -19,6 +19,13 @@ func go_to_arena() -> void:
 
 func change_scene(path: String) -> void:
 	scene_changing.emit(path)
+	# Deferred so it's safe to call from a scene's _ready() or from signal
+	# callbacks — the actual swap happens on the next idle frame, when the
+	# current scene is no longer in the middle of being added to the tree.
+	_do_change_scene.call_deferred(path)
+
+
+func _do_change_scene(path: String) -> void:
 	var err := get_tree().change_scene_to_file(path)
 	if err != OK:
 		push_error("SceneManager: failed to change to %s (err %d)" % [path, err])
