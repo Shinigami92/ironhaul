@@ -62,13 +62,13 @@ pip install "gdtoolkit==4.*"
 
 ```bash
 # Format in place
-gdformat scripts/ scenes/
+gdformat .
 
 # Or check without modifying
-gdformat --check scripts/ scenes/
+gdformat --check .
 
 # Lint
-gdlint scripts/ scenes/
+gdlint .
 ```
 
 We currently rely on gdtoolkit's defaults (no `.gdlintrc` in the repo). When a default rule actively hurts us, add a `.gdlintrc` at the project root and override the rule there — don't disable rules per file.
