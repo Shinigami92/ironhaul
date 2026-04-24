@@ -3,6 +3,9 @@ extends Node
 const PRIMARY_COLOR: Color = Color(1.0, 0.75, 0.3)  # warm orange
 const SECONDARY_COLOR: Color = Color(0.45, 0.8, 1.0)  # cold cyan
 
+const PRIMARY_FIRE_SOUND: AudioStream = preload("res://audio/sfx/kenney/laserSmall_000.ogg")
+const SECONDARY_FIRE_SOUND: AudioStream = preload("res://audio/sfx/kenney/laserLarge_000.ogg")
+
 @export var primary_damage: float = 8.0
 @export var primary_fire_rate: float = 4.0
 @export var primary_heat_per_shot: float = 11.0
@@ -30,13 +33,13 @@ func _process(delta: float) -> void:
 	if not mech.can_fire() or mech.camera == null:
 		return
 	if Input.is_action_pressed("fire_primary") and _primary_cooldown <= 0.0:
-		_fire_shot(primary_damage, primary_heat_per_shot, PRIMARY_COLOR)
+		_fire_shot(primary_damage, primary_heat_per_shot, PRIMARY_COLOR, PRIMARY_FIRE_SOUND)
 		_primary_cooldown = 1.0 / primary_fire_rate
 	if Input.is_action_just_pressed("fire_secondary"):
-		_fire_shot(secondary_damage, secondary_heat_per_shot, SECONDARY_COLOR)
+		_fire_shot(secondary_damage, secondary_heat_per_shot, SECONDARY_COLOR, SECONDARY_FIRE_SOUND)
 
 
-func _fire_shot(damage: float, heat_cost: float, color: Color) -> void:
+func _fire_shot(damage: float, heat_cost: float, color: Color, fire_sound: AudioStream) -> void:
 	var cam := mech.camera
 	var origin := cam.global_position
 	var forward := -cam.global_transform.basis.z
@@ -56,6 +59,11 @@ func _fire_shot(damage: float, heat_cost: float, color: Color) -> void:
 		collider = hit.get("collider")
 
 	WeaponVFX.spawn_shot_effects(mech, hit_pos, not hit.is_empty(), color)
+
+	var world_root := mech.get_tree().current_scene
+	WeaponVFX.play_one_shot_3d(world_root, mech.global_position, fire_sound)
+	if not hit.is_empty():
+		WeaponVFX.play_one_shot_3d(world_root, hit_pos, WeaponVFX.IMPACT_SOUND)
 
 	if collider != null and collider.has_method("take_damage"):
 		collider.take_damage(damage)

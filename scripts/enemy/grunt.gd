@@ -4,6 +4,7 @@ extends Mech
 enum AIState { PATROL, ENGAGE, RETREAT }
 
 const ENEMY_FIRE_COLOR: Color = Color(1.0, 0.35, 0.25)  # hot red
+const ENEMY_FIRE_SOUND: AudioStream = preload("res://audio/sfx/kenney/laserRetro_000.ogg")
 const SCRAP_PICKUP_SCRIPT := preload("res://scripts/pickups/scrap_pickup.gd")
 
 @export var detection_range: float = 35.0
@@ -139,6 +140,11 @@ func _attempt_attack() -> void:
 		collider = hit.get("collider")
 
 	WeaponVFX.spawn_shot_effects(self, hit_pos, not hit.is_empty(), ENEMY_FIRE_COLOR)
+
+	var world_root := get_tree().current_scene
+	WeaponVFX.play_one_shot_3d(world_root, global_position, ENEMY_FIRE_SOUND)
+	if not hit.is_empty():
+		WeaponVFX.play_one_shot_3d(world_root, hit_pos, WeaponVFX.IMPACT_SOUND)
 
 	if collider == player and collider.has_method("take_damage"):
 		collider.take_damage(attack_damage)
