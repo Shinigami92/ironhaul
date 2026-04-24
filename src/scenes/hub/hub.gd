@@ -113,7 +113,7 @@ func _spawn_player() -> void:
 
 
 func _spawn_hud() -> void:
-	var hud: CanvasLayer = preload("res://src/ui/hud/hud.gd").new()
+	var hud: CanvasLayer = preload("res://src/ui/hud/hud.tscn").instantiate()
 	add_child(hud)
 
 

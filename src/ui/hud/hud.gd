@@ -1,58 +1,18 @@
 extends CanvasLayer
 
 var player: Mech
-var health_bar: ProgressBar
-var heat_bar: ProgressBar
-var thrust_bar: ProgressBar
-var status_label: Label
-var materials_label: Label
-var hint_label: Label
-var crosshair: Control
+
+@onready var health_bar: ProgressBar = %HealthBar
+@onready var heat_bar: ProgressBar = %HeatBar
+@onready var thrust_bar: ProgressBar = %ThrustBar
+@onready var status_label: Label = %StatusLabel
+@onready var materials_label: Label = %MaterialsLabel
 
 
 func _ready() -> void:
-	_build_ui()
 	_find_and_connect_player()
 	GameState.materials_changed.connect(_on_materials_changed)
 	_on_materials_changed(GameState.materials_inventory)
-
-
-func _build_ui() -> void:
-	crosshair = CrosshairControl.new()
-	crosshair.set_anchors_preset(Control.PRESET_FULL_RECT)
-	crosshair.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(crosshair)
-
-	var panel := Control.new()
-	panel.position = Vector2(24, 24)
-	add_child(panel)
-
-	health_bar = _make_bar(Vector2(0, 0), Color(0.45, 1.0, 0.55))
-	panel.add_child(health_bar)
-
-	heat_bar = _make_bar(Vector2(0, 28), Color(1.0, 0.55, 0.3))
-	panel.add_child(heat_bar)
-
-	thrust_bar = _make_bar(Vector2(0, 56), Color(0.5, 0.8, 1.0))
-	panel.add_child(thrust_bar)
-
-	status_label = Label.new()
-	status_label.position = Vector2(0, 84)
-	status_label.add_theme_color_override("font_color", Color(1.0, 0.55, 0.25))
-	panel.add_child(status_label)
-
-	materials_label = Label.new()
-	materials_label.position = Vector2(0, 112)
-	panel.add_child(materials_label)
-
-	hint_label = Label.new()
-	hint_label.position = Vector2(0, 140)
-	hint_label.add_theme_color_override("font_color", Color(0.7, 0.8, 0.85))
-	hint_label.text = (
-		"WASD move  ·  SPACE thrust  ·  SHIFT dodge  ·  "
-		+ "LMB/RMB fire  ·  E interact  ·  ESC free mouse"
-	)
-	panel.add_child(hint_label)
 
 
 func _find_and_connect_player() -> void:
@@ -109,25 +69,3 @@ func _on_materials_changed(inventory: Dictionary) -> void:
 			inventory.get("ore", 0),
 		]
 	)
-
-
-func _make_bar(pos: Vector2, tint: Color) -> ProgressBar:
-	var bar := ProgressBar.new()
-	bar.size = Vector2(260, 20)
-	bar.position = pos
-	bar.min_value = 0
-	bar.max_value = 100
-	bar.show_percentage = false
-	bar.modulate = tint
-	return bar
-
-
-class CrosshairControl:
-	extends Control
-
-	func _draw() -> void:
-		var center := size / 2
-		var color := Color(0.4, 0.9, 0.85, 0.85)
-		draw_line(center - Vector2(7, 0), center + Vector2(7, 0), color, 2.0)
-		draw_line(center - Vector2(0, 7), center + Vector2(0, 7), color, 2.0)
-		draw_circle(center, 1.5, color)
