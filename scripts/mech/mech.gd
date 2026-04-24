@@ -8,10 +8,11 @@ signal overheated
 signal cooled
 signal died
 
-# Barrel offsets in mech-local space. Must stay in sync with
-# MechBuilder._add_arms, which places arm barrels at (±1.15, 2.0, 0.9).
-const BARREL_LOCAL_LEFT: Vector3 = Vector3(-1.15, 2.0, 0.9)
-const BARREL_LOCAL_RIGHT: Vector3 = Vector3(1.15, 2.0, 0.9)
+# Barrel offsets in mech-local space. Godot convention: -Z is forward, so
+# barrels sit in front of the torso. Must stay in sync with MechBuilder._add_arms,
+# which places arm barrels at (±1.15, 2.0, -0.9).
+const BARREL_LOCAL_LEFT: Vector3 = Vector3(-1.15, 2.0, -0.9)
+const BARREL_LOCAL_RIGHT: Vector3 = Vector3(1.15, 2.0, -0.9)
 
 @export var max_health: float = 100.0
 @export var max_heat: float = 100.0
@@ -117,7 +118,10 @@ func consume_thrust(amount: float) -> bool:
 func _setup_camera() -> void:
 	camera = Camera3D.new()
 	camera.name = "Camera"
-	camera.position = Vector3(0, 3.0, 0.2)
+	# Just above the torso top and slightly forward of the chest plate so the
+	# mech's own body is below/behind the view frustum. A proper cockpit mesh
+	# in v0.2 will take over this placement.
+	camera.position = Vector3(0, 3.2, -0.6)
 	camera.current = true
 	add_child(camera)
 
