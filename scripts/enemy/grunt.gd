@@ -1,6 +1,8 @@
 class_name Grunt
 extends Mech
 
+enum AIState { PATROL, ENGAGE, RETREAT }
+
 @export var detection_range: float = 35.0
 @export var engage_range: float = 22.0
 @export var retreat_health_frac: float = 0.25
@@ -8,8 +10,6 @@ extends Mech
 @export var attack_damage: float = 6.0
 @export var attack_interval: float = 1.4
 @export var enemy_gravity: float = 26.0
-
-enum AIState { PATROL, ENGAGE, RETREAT }
 
 var ai_state: AIState = AIState.PATROL
 var player: Mech
@@ -36,7 +36,10 @@ func _physics_process(delta: float) -> void:
 	match ai_state:
 		AIState.PATROL:
 			_patrol(delta)
-			if player != null and global_position.distance_to(player.global_position) < detection_range:
+			if (
+				player != null
+				and global_position.distance_to(player.global_position) < detection_range
+			):
 				ai_state = AIState.ENGAGE
 		AIState.ENGAGE:
 			_engage(delta)

@@ -4,9 +4,9 @@ extends CharacterBody3D
 signal health_changed(current: float, max_value: float)
 signal heat_changed(current: float, max_value: float)
 signal thrust_changed(current: float, max_value: float)
-signal overheated()
-signal cooled()
-signal died()
+signal overheated
+signal cooled
+signal died
 
 @export var max_health: float = 100.0
 @export var max_heat: float = 100.0

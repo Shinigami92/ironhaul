@@ -48,6 +48,35 @@ If you'd like to contribute art:
 - Prefer composition (child nodes) over inheritance for gameplay systems.
 - Keep scripts small and focused on one responsibility.
 
+### Formatting and linting
+
+Ironhaul uses [`gdtoolkit`](https://github.com/Scony/godot-gdscript-toolkit) (specifically `gdformat` and `gdlint`) for GDScript formatting and static analysis. CI runs both on every push and pull request — PRs that don't pass will be blocked.
+
+**One-time install** (requires Python 3.10+ and `pip`):
+
+```bash
+pip install "gdtoolkit==4.*"
+```
+
+**Run locally before pushing:**
+
+```bash
+# Format in place
+gdformat .
+
+# Or check without modifying
+gdformat --check .
+
+# Lint
+gdlint .
+```
+
+We currently rely on gdtoolkit's defaults (no `.gdlintrc` in the repo). When a default rule actively hurts us, add a `.gdlintrc` at the project root and override the rule there — don't disable rules per file.
+
+Optional editor integration:
+- **VS Code:** the [godot-tools](https://marketplace.visualstudio.com/items?itemName=geequlim.godot-tools) extension can call `gdformat` on save if Python and `gdtoolkit` are on your `PATH`.
+- **Godot editor:** no built-in formatter hook; run `gdformat` from the terminal before committing.
+
 ## How to contribute
 
 1. Fork the repo.

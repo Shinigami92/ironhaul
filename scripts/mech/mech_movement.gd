@@ -46,7 +46,7 @@ func _physics_process(delta: float) -> void:
 		return
 
 	var input_vec := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
-	var wish_dir := (mech.transform.basis * Vector3(input_vec.x, 0, input_vec.y))
+	var wish_dir := mech.transform.basis * Vector3(input_vec.x, 0, input_vec.y)
 	wish_dir.y = 0
 	if wish_dir.length() > 0.01:
 		wish_dir = wish_dir.normalized()

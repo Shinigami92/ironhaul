@@ -83,7 +83,9 @@ static func _make_box(size: Vector3, pos: Vector3, mat: Material) -> MeshInstanc
 	return mi
 
 
-static func _make_cylinder(radius: float, height: float, pos: Vector3, mat: Material) -> MeshInstance3D:
+static func _make_cylinder(
+	radius: float, height: float, pos: Vector3, mat: Material
+) -> MeshInstance3D:
 	var mi := MeshInstance3D.new()
 	var mesh := CylinderMesh.new()
 	mesh.top_radius = radius
