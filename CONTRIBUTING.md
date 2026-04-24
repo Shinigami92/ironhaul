@@ -7,6 +7,7 @@ Thanks for being interested. Ironhaul is in very early development — expect si
 - Read the [README](./README.md) for the vision and v0.1 scope.
 - For anything bigger than a small fix, open an issue first so we can align.
 - Contributions are accepted under the project's [MIT License](./LICENSE). By opening a pull request, you agree to license your contribution under MIT.
+- **Install [Git LFS](https://git-lfs.com/)** (one-time per machine): `git lfs install`. Ironhaul routes binary assets (audio, textures, 3D models — patterns listed in [`.gitattributes`](./.gitattributes)) through LFS so clones stay fast as the asset library grows. Without LFS, the affected files will appear as short text pointers instead of real binaries.
 
 ## Tech stack
 
