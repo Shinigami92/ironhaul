@@ -96,6 +96,7 @@ const ENEMY_SPAWN_POINTS: Array[Vector3] = [
 
 const GRUNT_SCRIPT := preload("res://src/enemy/grunt/grunt.gd")
 const HUD_SCENE := preload("res://src/ui/hud/hud.tscn")
+const MECH_SCENE := preload("res://src/mech/mech.tscn")
 
 var player: Mech
 var return_area: Area3D
@@ -301,7 +302,7 @@ func _on_return_exit(body: Node) -> void:
 
 
 func _spawn_player() -> void:
-	player = Mech.new()
+	player = MECH_SCENE.instantiate()
 	player.is_enemy = false
 	player.position = PLAYER_SPAWN_POS
 	add_child(player)

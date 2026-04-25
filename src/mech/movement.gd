@@ -45,7 +45,9 @@ func _setup_thruster_audio() -> void:
 	_thruster_player = AudioStreamPlayer3D.new()
 	_thruster_player.stream = looped
 	_thruster_player.volume_db = -6.0
-	mech.add_child(_thruster_player)
+	# Deferred: mech is still propagating ready to its authored children when
+	# our _ready runs, so a direct add_child hits `data.blocked > 0`.
+	mech.add_child.call_deferred(_thruster_player)
 
 
 func _setup_footstep_audio() -> void:
@@ -56,7 +58,7 @@ func _setup_footstep_audio() -> void:
 	_footstep_player = AudioStreamPlayer3D.new()
 	_footstep_player.stream = looped
 	_footstep_player.volume_db = -4.0
-	mech.add_child(_footstep_player)
+	mech.add_child.call_deferred(_footstep_player)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -120,6 +122,10 @@ func _physics_process(delta: float) -> void:
 
 
 func _update_thruster_loop(thrust_applied: bool) -> void:
+	# The audio players are added to mech via call_deferred; skip until the
+	# deferred add_child has flushed into the scene tree.
+	if not _thruster_player.is_inside_tree():
+		return
 	if thrust_applied and not _thruster_player.playing:
 		_thruster_player.play()
 	elif not thrust_applied and _thruster_player.playing:
@@ -127,6 +133,8 @@ func _update_thruster_loop(thrust_applied: bool) -> void:
 
 
 func _update_footsteps(_delta: float) -> void:
+	if not _footstep_player.is_inside_tree():
+		return
 	var h_speed := Vector2(mech.velocity.x, mech.velocity.z).length()
 	var walking := mech.is_on_floor() and h_speed >= WALK_SPEED_THRESHOLD
 	if walking and not _footstep_player.playing:
