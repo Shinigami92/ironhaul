@@ -48,7 +48,7 @@ func _ready() -> void:
 	heat = Heat.new(max_heat, heat_decay_per_sec, overheat_cool_threshold)
 	thrust = Thrust.new(max_thrust, thrust_regen_per_sec, thrust_regen_delay_sec)
 
-	# Forward component signals so listeners (HUD, arena, grunt AI) bind to
+	# Forward component signals so listeners (HUD, zone, grunt AI) bind to
 	# `mech.*` as before and don't need to reach into `mech.health.*` etc.
 	health.changed.connect(health_changed.emit)
 	health.depleted.connect(_on_health_depleted)

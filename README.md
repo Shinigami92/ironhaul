@@ -31,8 +31,8 @@ You are a hauler — a salvager-mercenary piloting a customizable mech through t
 
 ## Roadmap
 
-- **v0.1 (current):** Hub + sandbox arena. One greybox mech, thruster movement, heat-gated weapon, one grunt enemy, basic HUD, scene transitions, local save pipeline.
-- **v0.2:** Part-composition system — code assembles mechs at runtime from real 3D part assets (one asset per head / core / arms / legs / weapon slot) rather than from primitives. First real mech parts sourced from friends, community contributions, or AI-generation. Mission-objective scaffolding in the arena.
+- **v0.1 (current):** Hub + sandbox zone. One greybox mech, thruster movement, heat-gated weapon, one grunt enemy, basic HUD, scene transitions, local save pipeline.
+- **v0.2:** Part-composition system — code assembles mechs at runtime from real 3D part assets (one asset per head / core / arms / legs / weapon slot) rather than from primitives. First real mech parts sourced from friends, community contributions, or AI-generation. Mission-objective scaffolding in the zone.
 - **v0.3:** Procedural zones (parameterized terrain + POI placement), materials-to-upgrades hub loop, first pass at cockpit immersion.
 - **v0.4+:** Drop-in/drop-out co-op (Godot `MultiplayerAPI`, ENet first, Steam/EOS peers per platform at publish).
 

@@ -4,7 +4,7 @@ signal scene_changing(to_path: String)
 signal scene_changed(to_path: String)
 
 const HUB_SCENE: String = "res://src/scenes/hub/hub.tscn"
-const ARENA_SCENE: String = "res://src/scenes/arena/arena.tscn"
+const ZONE_SCENE: String = "res://src/scenes/zone/zone.tscn"
 
 var current_scene_path: String = ""
 
@@ -13,8 +13,8 @@ func go_to_hub() -> void:
 	change_scene(HUB_SCENE)
 
 
-func go_to_arena() -> void:
-	change_scene(ARENA_SCENE)
+func go_to_zone() -> void:
+	change_scene(ZONE_SCENE)
 
 
 func change_scene(path: String) -> void:

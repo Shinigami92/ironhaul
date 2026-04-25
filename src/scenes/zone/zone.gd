@@ -2,11 +2,11 @@
 extends Node3D
 
 # `@tool` so the static city geometry renders inside the Godot editor when
-# arena.tscn is opened. Dynamic spawning (player, enemies, HUD, signal wiring)
+# zone.tscn is opened. Dynamic spawning (player, enemies, HUD, signal wiring)
 # is guarded by `Engine.is_editor_hint()` so the editor only shows the world,
 # not runtime entities.
 
-const ARENA_HALF: float = 250.0  # full arena is 500×500m
+const ZONE_HALF: float = 250.0  # full zone is 500×500m
 const WALL_HEIGHT: float = 30.0
 const WALL_THICKNESS: float = 2.0
 const KILL_PLANE_Y: float = -20.0
@@ -23,7 +23,7 @@ const PLATFORM_COLOR: Color = Color(0.40, 0.36, 0.28)
 const PLAZA_COVER_COLOR: Color = Color(0.40, 0.42, 0.44)
 
 # Tall, varied "building" boxes clustered in four cardinal districts plus two
-# smaller diagonal clusters. Edit entries here to reshape the city — arena.gd
+# smaller diagonal clusters. Edit entries here to reshape the city — zone.gd
 # rebuilds the full layout whenever the scene is (re)loaded.
 const BUILDINGS: Array = [
 	# North district
@@ -83,7 +83,7 @@ const PLAZA_COVER: Array = [
 	{"pos": Vector3(0, 2.5, -40), "size": Vector3(6, 5, 4)},
 ]
 
-# Grunt spawn points — one grunt spawns per point on arena load, and the
+# Grunt spawn points — one grunt spawns per point on zone load, and the
 # corresponding point respawns GRUNT_RESPAWN_DELAY_SEC after each death.
 const ENEMY_SPAWN_POINTS: Array[Vector3] = [
 	Vector3(0, 0.2, -100),
@@ -183,12 +183,12 @@ func _on_grunt_died(spawn_index: int) -> void:
 
 
 func _build_ground() -> void:
-	var size := Vector3(ARENA_HALF * 2.0, 1.0, ARENA_HALF * 2.0)
+	var size := Vector3(ZONE_HALF * 2.0, 1.0, ZONE_HALF * 2.0)
 	_make_static_box(size, Vector3(0, -0.5, 0), GROUND_COLOR)
 
 
 func _build_perimeter_walls() -> void:
-	var half := ARENA_HALF
+	var half := ZONE_HALF
 	var y := WALL_HEIGHT * 0.5
 	var long_size := Vector3(half * 2.0, WALL_HEIGHT, WALL_THICKNESS)
 	var wide_size := Vector3(WALL_THICKNESS, WALL_HEIGHT, half * 2.0)
