@@ -56,7 +56,16 @@ func test_comms_tower_scene_loads_with_two_deposits() -> void:
 	assert_eq(tower.get_deposits().size(), 2)
 
 
+func test_downed_dropship_scene_loads_with_asymmetric_footprint() -> void:
+	var scene: PackedScene = load("res://src/poi/downed_dropship/downed_dropship.tscn")
+	var dropship := scene.instantiate() as Poi
+	add_child_autofree(dropship)
+	assert_eq(dropship.poi_type, &"downed_dropship")
+	assert_eq(dropship.get_deposits().size(), 2)
+	assert_ne(dropship.footprint.x, dropship.footprint.y)
+
+
 func test_catalog_filters_entries_by_zone() -> void:
 	var catalog: PoiCatalog = load("res://src/poi/poi_catalog.tres")
-	assert_eq(catalog.entries_for_zone(&"smelter").size(), 2)
+	assert_eq(catalog.entries_for_zone(&"smelter").size(), 3)
 	assert_eq(catalog.entries_for_zone(&"nonexistent_zone").size(), 0)
