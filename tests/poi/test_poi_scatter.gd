@@ -92,6 +92,22 @@ func test_deterministic_for_same_seed() -> void:
 		assert_eq(run1[i].position, run2[i].position)
 
 
+func test_assigns_random_y_rotations() -> void:
+	var catalog := _make_catalog([_make_entry(_REFINERY_SCENE, 1.0, 20.0)])
+	var placements := PoiScatter.scatter(
+		catalog, &"smelter", Rect2(-200, -200, 400, 400), 5, _seeded_rng(42)
+	)
+	# All rotations should be in [0, TAU). With a fixed seed and 5 placements,
+	# at least one should be measurably non-zero.
+	var any_rotated := false
+	for p in placements:
+		assert_gte(p.rotation_y, 0.0)
+		assert_lt(p.rotation_y, TAU)
+		if absf(p.rotation_y) > 0.001:
+			any_rotated = true
+	assert_true(any_rotated)
+
+
 func test_uses_real_catalog_with_three_entries() -> void:
 	var catalog: PoiCatalog = load("res://src/poi/poi_catalog.tres")
 	var placements := PoiScatter.scatter(

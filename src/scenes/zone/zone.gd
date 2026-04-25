@@ -1,10 +1,11 @@
 @tool
 extends Node3D
 
-# `@tool` so the static city geometry renders inside the Godot editor when
-# zone.tscn is opened. Dynamic spawning (player, enemies, HUD, signal wiring)
-# is guarded by `Engine.is_editor_hint()` so the editor only shows the world,
-# not runtime entities.
+# `@tool` so the perimeter, ground, lighting, and a fixed-seed POI scatter
+# preview render inside the Godot editor when zone.tscn is opened. Dynamic
+# spawning (player, enemies, HUD, signal wiring) is guarded by
+# `Engine.is_editor_hint()` so the editor only shows the world, not runtime
+# entities.
 
 const ZONE_HALF: float = 250.0  # full zone is 500×500m
 const WALL_HEIGHT: float = 30.0
@@ -18,70 +19,18 @@ const PLAYER_SPAWN_POS: Vector3 = Vector3(0, 0.2, 0)
 
 const GROUND_COLOR: Color = Color(0.22, 0.24, 0.26)
 const WALL_COLOR: Color = Color(0.18, 0.20, 0.22)
-const BUILDING_COLOR: Color = Color(0.30, 0.32, 0.34)
-const PLATFORM_COLOR: Color = Color(0.40, 0.36, 0.28)
-const PLAZA_COVER_COLOR: Color = Color(0.40, 0.42, 0.44)
 
-# Tall, varied "building" boxes clustered in four cardinal districts plus two
-# smaller diagonal clusters. Edit entries here to reshape the city — zone.gd
-# rebuilds the full layout whenever the scene is (re)loaded.
-const BUILDINGS: Array = [
-	# North district
-	{"pos": Vector3(0, 15, -150), "size": Vector3(22, 30, 16)},
-	{"pos": Vector3(-40, 18, -170), "size": Vector3(20, 36, 18)},
-	{"pos": Vector3(40, 14, -170), "size": Vector3(18, 28, 20)},
-	{"pos": Vector3(-20, 22, -200), "size": Vector3(16, 44, 22)},
-	{"pos": Vector3(30, 20, -200), "size": Vector3(22, 40, 18)},
-	{"pos": Vector3(-60, 12, -220), "size": Vector3(24, 24, 20)},
-	# South district
-	{"pos": Vector3(0, 16, 150), "size": Vector3(24, 32, 18)},
-	{"pos": Vector3(-35, 14, 170), "size": Vector3(18, 28, 16)},
-	{"pos": Vector3(45, 20, 170), "size": Vector3(20, 40, 20)},
-	{"pos": Vector3(-15, 22, 200), "size": Vector3(22, 44, 18)},
-	{"pos": Vector3(40, 18, 210), "size": Vector3(18, 36, 22)},
-	{"pos": Vector3(-50, 15, 225), "size": Vector3(26, 30, 18)},
-	# East district
-	{"pos": Vector3(150, 18, 0), "size": Vector3(16, 36, 22)},
-	{"pos": Vector3(180, 14, -30), "size": Vector3(20, 28, 18)},
-	{"pos": Vector3(160, 20, 40), "size": Vector3(18, 40, 20)},
-	{"pos": Vector3(210, 22, 10), "size": Vector3(22, 44, 18)},
-	{"pos": Vector3(190, 16, 55), "size": Vector3(20, 32, 16)},
-	{"pos": Vector3(220, 12, -45), "size": Vector3(18, 24, 22)},
-	# West district
-	{"pos": Vector3(-150, 16, 0), "size": Vector3(20, 32, 20)},
-	{"pos": Vector3(-175, 20, -35), "size": Vector3(18, 40, 18)},
-	{"pos": Vector3(-155, 14, 35), "size": Vector3(22, 28, 20)},
-	{"pos": Vector3(-205, 18, 5), "size": Vector3(16, 36, 22)},
-	{"pos": Vector3(-190, 22, -50), "size": Vector3(20, 44, 18)},
-	{"pos": Vector3(-215, 14, 55), "size": Vector3(22, 28, 16)},
-	# NE small cluster
-	{"pos": Vector3(120, 16, -130), "size": Vector3(18, 32, 20)},
-	{"pos": Vector3(145, 20, -145), "size": Vector3(16, 40, 18)},
-	{"pos": Vector3(105, 14, -155), "size": Vector3(20, 28, 22)},
-	# SW small cluster
-	{"pos": Vector3(-125, 16, 130), "size": Vector3(20, 32, 18)},
-	{"pos": Vector3(-150, 18, 145), "size": Vector3(18, 36, 20)},
-	{"pos": Vector3(-110, 14, 155), "size": Vector3(22, 28, 16)},
-]
-
-# Thin elevated slabs between the plaza and the outer districts. Thrust-up to
-# reach them for a temporary high ground.
-const PLATFORMS: Array = [
-	{"pos": Vector3(-30, 7, -60), "size": Vector3(12, 1, 10)},
-	{"pos": Vector3(30, 8, 60), "size": Vector3(14, 1, 12)},
-	{"pos": Vector3(60, 7, 0), "size": Vector3(12, 1, 12)},
-	{"pos": Vector3(-60, 8, 20), "size": Vector3(10, 1, 10)},
-]
-
-# Small cover blocks scattered across the central plaza.
-const PLAZA_COVER: Array = [
-	{"pos": Vector3(15, 2.5, 15), "size": Vector3(5, 5, 5)},
-	{"pos": Vector3(-18, 3.0, 20), "size": Vector3(6, 6, 5)},
-	{"pos": Vector3(25, 2.0, -20), "size": Vector3(5, 4, 5)},
-	{"pos": Vector3(-25, 2.5, -15), "size": Vector3(5, 5, 6)},
-	{"pos": Vector3(5, 3.0, 40), "size": Vector3(4, 6, 4)},
-	{"pos": Vector3(0, 2.5, -40), "size": Vector3(6, 5, 4)},
-]
+# POI scattering configuration. `POI_BOUNDS_INSET` keeps scattered POIs away
+# from the perimeter walls; the *_CLEAR_RADIUS values keep them off the
+# player spawn and the return-zone marker. Editor preview uses a fixed seed
+# so the layout doesn't reshuffle on every scene reload.
+const ZONE_TAG: StringName = &"smelter"
+const POI_COUNT: int = 8
+const POI_BOUNDS_INSET: float = 50.0
+const POI_SPAWN_CLEAR_RADIUS: float = 30.0
+const POI_RETURN_CLEAR_RADIUS: float = 25.0
+const POI_EDITOR_PREVIEW_SEED: int = 0
+const POI_CATALOG := preload("res://src/poi/poi_catalog.tres")
 
 # Grunt spawn points — one grunt spawns per point on zone load, and the
 # corresponding point respawns GRUNT_RESPAWN_DELAY_SEC after each death.
@@ -110,9 +59,7 @@ func _ready() -> void:
 	_build_ground()
 	_build_worldenvironment()
 	_build_perimeter_walls()
-	_build_boxes(BUILDINGS, BUILDING_COLOR)
-	_build_boxes(PLATFORMS, PLATFORM_COLOR)
-	_build_boxes(PLAZA_COVER, PLAZA_COVER_COLOR)
+	_scatter_pois()
 	_build_return_zone_marker()
 
 	if Engine.is_editor_hint():
@@ -198,9 +145,28 @@ func _build_perimeter_walls() -> void:
 	_make_static_box(wide_size, Vector3(half, y, 0), WALL_COLOR)
 
 
-func _build_boxes(specs: Array, color: Color) -> void:
-	for spec in specs:
-		_make_static_box(spec["size"], spec["pos"], color)
+func _scatter_pois() -> void:
+	var rng := RandomNumberGenerator.new()
+	if Engine.is_editor_hint():
+		rng.seed = POI_EDITOR_PREVIEW_SEED
+	else:
+		rng.randomize()
+	var inset := POI_BOUNDS_INSET
+	var size := (ZONE_HALF - inset) * 2.0
+	var bounds := Rect2(-ZONE_HALF + inset, -ZONE_HALF + inset, size, size)
+	var placements := PoiScatter.scatter(POI_CATALOG, ZONE_TAG, bounds, POI_COUNT, rng)
+	for p in placements:
+		# Discard placements that would clip the player spawn or the return
+		# marker — better a slightly under-count zone than a POI on top of
+		# either landmark.
+		if p.position.distance_to(PLAYER_SPAWN_POS) < POI_SPAWN_CLEAR_RADIUS:
+			continue
+		if p.position.distance_to(RETURN_ZONE_POS) < POI_RETURN_CLEAR_RADIUS:
+			continue
+		var instance: Node3D = p.scene.instantiate()
+		instance.position = p.position
+		instance.rotation.y = p.rotation_y
+		add_child(instance)
 
 
 func _build_worldenvironment() -> void:
