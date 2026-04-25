@@ -48,7 +48,15 @@ func test_refinery_scene_loads_with_three_deposits() -> void:
 	assert_eq(refinery.get_deposits().size(), 3)
 
 
+func test_comms_tower_scene_loads_with_two_deposits() -> void:
+	var scene: PackedScene = load("res://src/poi/comms_tower/comms_tower.tscn")
+	var tower := scene.instantiate() as Poi
+	add_child_autofree(tower)
+	assert_eq(tower.poi_type, &"comms_tower")
+	assert_eq(tower.get_deposits().size(), 2)
+
+
 func test_catalog_filters_entries_by_zone() -> void:
 	var catalog: PoiCatalog = load("res://src/poi/poi_catalog.tres")
-	assert_gt(catalog.entries_for_zone(&"smelter").size(), 0)
+	assert_eq(catalog.entries_for_zone(&"smelter").size(), 2)
 	assert_eq(catalog.entries_for_zone(&"nonexistent_zone").size(), 0)
