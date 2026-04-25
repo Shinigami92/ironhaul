@@ -1,0 +1,117 @@
+[gd_scene load_steps=15 format=3]
+
+[ext_resource type="Script" path="res://src/poi/poi.gd" id="1_poi"]
+[ext_resource type="Script" path="res://src/poi/deposit.gd" id="2_deposit"]
+
+[sub_resource type="StandardMaterial3D" id="building_mat"]
+albedo_color = Color(0.4, 0.42, 0.45, 1)
+roughness = 0.85
+
+[sub_resource type="StandardMaterial3D" id="tank_mat"]
+albedo_color = Color(0.5, 0.45, 0.35, 1)
+metallic = 0.4
+roughness = 0.7
+
+[sub_resource type="StandardMaterial3D" id="outbuilding_mat"]
+albedo_color = Color(0.35, 0.38, 0.4, 1)
+roughness = 0.85
+
+[sub_resource type="StandardMaterial3D" id="deposit_mat"]
+albedo_color = Color(0.4, 0.85, 0.7, 1)
+metallic = 0.5
+emission_enabled = true
+emission = Color(0.3, 1, 0.85, 1)
+emission_energy_multiplier = 2.5
+
+[sub_resource type="BoxMesh" id="building_mesh"]
+size = Vector3(12, 10, 12)
+
+[sub_resource type="BoxShape3D" id="building_shape"]
+size = Vector3(12, 10, 12)
+
+[sub_resource type="CylinderMesh" id="tank_mesh"]
+top_radius = 2.5
+bottom_radius = 2.5
+height = 8.0
+
+[sub_resource type="CylinderShape3D" id="tank_shape"]
+height = 8.0
+radius = 2.5
+
+[sub_resource type="BoxMesh" id="outbuilding_mesh"]
+size = Vector3(6, 4, 6)
+
+[sub_resource type="BoxShape3D" id="outbuilding_shape"]
+size = Vector3(6, 4, 6)
+
+[sub_resource type="BoxMesh" id="deposit_mesh"]
+size = Vector3(0.8, 0.8, 0.8)
+
+[node name="Refinery" type="Node3D"]
+script = ExtResource("1_poi")
+poi_type = &"refinery"
+footprint = Vector2(25, 25)
+
+[node name="MainBuilding" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MainBuilding"]
+shape = SubResource("building_shape")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="MainBuilding"]
+mesh = SubResource("building_mesh")
+material_override = SubResource("building_mat")
+
+[node name="Tank1" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 4, -9)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Tank1"]
+shape = SubResource("tank_shape")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Tank1"]
+mesh = SubResource("tank_mesh")
+material_override = SubResource("tank_mat")
+
+[node name="Tank2" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 4, -9)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Tank2"]
+shape = SubResource("tank_shape")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Tank2"]
+mesh = SubResource("tank_mesh")
+material_override = SubResource("tank_mat")
+
+[node name="Outbuilding" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 2, 8)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Outbuilding"]
+shape = SubResource("outbuilding_shape")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Outbuilding"]
+mesh = SubResource("outbuilding_mesh")
+material_override = SubResource("outbuilding_mat")
+
+[node name="DepositRooftop" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.5, 0)
+script = ExtResource("2_deposit")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="DepositRooftop"]
+mesh = SubResource("deposit_mesh")
+material_override = SubResource("deposit_mat")
+
+[node name="DepositTanks" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -9)
+script = ExtResource("2_deposit")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="DepositTanks"]
+mesh = SubResource("deposit_mesh")
+material_override = SubResource("deposit_mat")
+
+[node name="DepositOutbuilding" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.5, 4)
+script = ExtResource("2_deposit")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="DepositOutbuilding"]
+mesh = SubResource("deposit_mesh")
+material_override = SubResource("deposit_mat")
