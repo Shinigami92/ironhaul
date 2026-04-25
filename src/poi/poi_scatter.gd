@@ -1,3 +1,4 @@
+@tool
 class_name PoiScatter
 
 # Up to `count` POIs from `catalog`'s zone-filtered entries placed inside
@@ -62,7 +63,11 @@ static func _try_place(
 		var z := rng.randf_range(bounds.position.y, bounds.end.y)
 		var pos := Vector3(x, 0.0, z)
 		if _is_far_enough(pos, existing, entry.min_distance_to_other_poi):
-			return ScatterPlacement.new(entry.scene, pos, entry.min_distance_to_other_poi)
+			# Random Y rotation for visual variety. The distance check above
+			# stays axis-aligned-footprint-based; safe so long as the rotated
+			# extent of any POI fits inside its `min_distance_to_other_poi`.
+			var rot_y := rng.randf() * TAU
+			return ScatterPlacement.new(entry.scene, pos, entry.min_distance_to_other_poi, rot_y)
 	return null
 
 
