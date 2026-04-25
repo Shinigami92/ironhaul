@@ -94,7 +94,7 @@ const ENEMY_SPAWN_POINTS: Array[Vector3] = [
 	Vector3(-80, 0.2, 80),
 ]
 
-const GRUNT_SCRIPT := preload("res://src/enemy/grunt/grunt.gd")
+const GRUNT_SCENE := preload("res://src/enemy/grunt/grunt.tscn")
 const HUD_SCENE := preload("res://src/ui/hud/hud.tscn")
 const MECH_SCENE := preload("res://src/mech/mech.tscn")
 
@@ -166,7 +166,7 @@ func _spawn_initial_grunts() -> void:
 
 
 func _spawn_grunt_at(spawn_index: int) -> void:
-	var grunt: Grunt = GRUNT_SCRIPT.new()
+	var grunt: Grunt = GRUNT_SCENE.instantiate()
 	grunt.position = ENEMY_SPAWN_POINTS[spawn_index]
 	grunt.died.connect(_on_grunt_died.bind(spawn_index))
 	add_child(grunt)

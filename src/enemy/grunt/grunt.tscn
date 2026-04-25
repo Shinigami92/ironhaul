@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://src/mech/mech.tscn" id="1_mech_scene"]
+[ext_resource type="Script" path="res://src/enemy/grunt/grunt.gd" id="2_grunt"]
+
+[node name="Grunt" instance=ExtResource("1_mech_scene")]
+script = ExtResource("2_grunt")
+is_enemy = true
+
+[node name="Camera" parent="."]
+current = false

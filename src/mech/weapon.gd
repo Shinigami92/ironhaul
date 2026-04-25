@@ -21,6 +21,12 @@ func _ready() -> void:
 	mech = get_parent() as Mech
 	if mech == null:
 		push_error("MechWeapon: parent must be Mech")
+		return
+	if mech.is_enemy:
+		# Enemy mechs inherit mech.tscn so Weapon is attached, but Grunt fires
+		# via its own _attempt_attack logic. Disable _process so we don't also
+		# fire on player input.
+		set_process(false)
 
 
 func _process(delta: float) -> void:
