@@ -31,6 +31,13 @@ func _ready() -> void:
 	if mech == null:
 		push_error("MechMovement: parent must be Mech")
 		return
+	if mech.is_enemy:
+		# Enemy mechs inherit mech.tscn so Movement is attached, but Grunt AI
+		# drives locomotion instead. Disable per-frame input and physics so we
+		# don't fight the AI or capture the mouse.
+		set_physics_process(false)
+		set_process_unhandled_input(false)
+		return
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	_setup_thruster_audio()
 	_setup_footstep_audio()
