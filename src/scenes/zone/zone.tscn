@@ -1,6 +1,156 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=14 format=3]
 
 [ext_resource type="Script" path="res://src/scenes/zone/zone.gd" id="1_zone"]
 
+[sub_resource type="StandardMaterial3D" id="ground_mat"]
+albedo_color = Color(0.22, 0.24, 0.26, 1)
+roughness = 0.85
+
+[sub_resource type="StandardMaterial3D" id="wall_mat"]
+albedo_color = Color(0.18, 0.2, 0.22, 1)
+roughness = 0.85
+
+[sub_resource type="StandardMaterial3D" id="return_mat"]
+albedo_color = Color(0.9, 0.45, 0.2, 1)
+emission_enabled = true
+emission = Color(1, 0.5, 0.2, 1)
+emission_energy_multiplier = 2.2
+
+[sub_resource type="BoxMesh" id="ground_mesh"]
+size = Vector3(500, 1, 500)
+
+[sub_resource type="BoxShape3D" id="ground_shape"]
+size = Vector3(500, 1, 500)
+
+[sub_resource type="BoxMesh" id="wall_long_mesh"]
+size = Vector3(500, 30, 2)
+
+[sub_resource type="BoxShape3D" id="wall_long_shape"]
+size = Vector3(500, 30, 2)
+
+[sub_resource type="BoxMesh" id="wall_wide_mesh"]
+size = Vector3(2, 30, 500)
+
+[sub_resource type="BoxShape3D" id="wall_wide_shape"]
+size = Vector3(2, 30, 500)
+
+[sub_resource type="CylinderMesh" id="return_marker_mesh"]
+top_radius = 3.5
+bottom_radius = 3.5
+height = 0.2
+
+[sub_resource type="CylinderShape3D" id="return_area_shape"]
+height = 6.0
+radius = 4.0
+
+[sub_resource type="Environment" id="zone_env"]
+background_mode = 1
+background_color = Color(0.33, 0.4, 0.36, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.55, 0.65, 0.6, 1)
+ambient_light_energy = 0.55
+tonemap_mode = 3
+tonemap_exposure = 1.1
+fog_enabled = true
+fog_light_color = Color(0.4, 0.55, 0.5, 1)
+fog_density = 0.012
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.035
+volumetric_fog_albedo = Color(0.42, 0.55, 0.48, 1)
+glow_enabled = true
+glow_intensity = 0.85
+glow_bloom = 0.22
+glow_blend_mode = 2
+adjustment_enabled = true
+adjustment_contrast = 1.08
+adjustment_saturation = 0.93
+
 [node name="Zone" type="Node3D"]
 script = ExtResource("1_zone")
+
+[node name="Ground" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+shape = SubResource("ground_shape")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
+mesh = SubResource("ground_mesh")
+material_override = SubResource("ground_mat")
+
+[node name="WallNorth" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, -250)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WallNorth"]
+shape = SubResource("wall_long_shape")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="WallNorth"]
+mesh = SubResource("wall_long_mesh")
+material_override = SubResource("wall_mat")
+
+[node name="WallSouth" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, 250)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WallSouth"]
+shape = SubResource("wall_long_shape")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="WallSouth"]
+mesh = SubResource("wall_long_mesh")
+material_override = SubResource("wall_mat")
+
+[node name="WallWest" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -250, 15, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WallWest"]
+shape = SubResource("wall_wide_shape")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="WallWest"]
+mesh = SubResource("wall_wide_mesh")
+material_override = SubResource("wall_mat")
+
+[node name="WallEast" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, 15, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WallEast"]
+shape = SubResource("wall_wide_shape")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="WallEast"]
+mesh = SubResource("wall_wide_mesh")
+material_override = SubResource("wall_mat")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("zone_env")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.819152, 0, 0.573576, 0.426164, 0.669131, -0.608761, -0.383754, 0.743145, 0.548163, 0, 0, 0)
+light_color = Color(1, 0.95, 0.85, 1)
+light_energy = 0.9
+shadow_enabled = true
+
+[node name="ReturnMarkerMesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 180, 0.3, -180)
+mesh = SubResource("return_marker_mesh")
+material_override = SubResource("return_mat")
+
+[node name="ReturnArea" type="Area3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 180, 0.3, -180)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ReturnArea"]
+shape = SubResource("return_area_shape")
+
+[node name="ReturnLabel" type="Label3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 180, 4.3, -180)
+visible = false
+modulate = Color(1, 0.72, 0.35, 1)
+billboard = 1
+text = "RETURN TO HUB  [E]"
+font_size = 42
+
+[node name="PlayerSpawn" type="Marker3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+
+[connection signal="body_entered" from="ReturnArea" to="." method="_on_return_enter"]
+[connection signal="body_exited" from="ReturnArea" to="." method="_on_return_exit"]
