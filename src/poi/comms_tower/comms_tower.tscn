@@ -1,0 +1,130 @@
+[gd_scene load_steps=14 format=3]
+
+[ext_resource type="Script" path="res://src/poi/poi.gd" id="1_poi"]
+[ext_resource type="Script" path="res://src/poi/deposit.gd" id="2_deposit"]
+
+[sub_resource type="StandardMaterial3D" id="pad_mat"]
+albedo_color = Color(0.32, 0.34, 0.36, 1)
+roughness = 0.85
+
+[sub_resource type="StandardMaterial3D" id="shed_mat"]
+albedo_color = Color(0.36, 0.38, 0.40, 1)
+roughness = 0.85
+
+[sub_resource type="StandardMaterial3D" id="mast_mat"]
+albedo_color = Color(0.22, 0.23, 0.25, 1)
+metallic = 0.6
+roughness = 0.5
+
+[sub_resource type="StandardMaterial3D" id="spire_mat"]
+albedo_color = Color(0.18, 0.19, 0.20, 1)
+metallic = 0.7
+roughness = 0.4
+
+[sub_resource type="StandardMaterial3D" id="deposit_mat"]
+albedo_color = Color(0.4, 0.85, 0.7, 1)
+metallic = 0.5
+emission_enabled = true
+emission = Color(0.3, 1, 0.85, 1)
+emission_energy_multiplier = 2.5
+
+[sub_resource type="BoxMesh" id="pad_mesh"]
+size = Vector3(10, 1, 10)
+
+[sub_resource type="BoxShape3D" id="pad_shape"]
+size = Vector3(10, 1, 10)
+
+[sub_resource type="BoxMesh" id="shed_mesh"]
+size = Vector3(4, 3.5, 4)
+
+[sub_resource type="BoxShape3D" id="shed_shape"]
+size = Vector3(4, 3.5, 4)
+
+[sub_resource type="CylinderMesh" id="mast_mesh"]
+top_radius = 1.0
+bottom_radius = 1.0
+height = 22.0
+
+[sub_resource type="CylinderShape3D" id="mast_shape"]
+height = 22.0
+radius = 1.0
+
+[sub_resource type="BoxMesh" id="top_mesh"]
+size = Vector3(5, 0.8, 5)
+
+[sub_resource type="BoxShape3D" id="top_shape"]
+size = Vector3(5, 0.8, 5)
+
+[sub_resource type="CylinderMesh" id="spire_mesh"]
+top_radius = 0.15
+bottom_radius = 0.3
+height = 4.0
+
+[sub_resource type="BoxMesh" id="deposit_mesh"]
+size = Vector3(0.8, 0.8, 0.8)
+
+[node name="CommsTower" type="Node3D"]
+script = ExtResource("1_poi")
+poi_type = &"comms_tower"
+footprint = Vector2(10, 10)
+
+[node name="Pad" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Pad"]
+shape = SubResource("pad_shape")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Pad"]
+mesh = SubResource("pad_mesh")
+material_override = SubResource("pad_mat")
+
+[node name="Shed" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 2.75, 3)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Shed"]
+shape = SubResource("shed_shape")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Shed"]
+mesh = SubResource("shed_mesh")
+material_override = SubResource("shed_mat")
+
+[node name="Mast" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Mast"]
+shape = SubResource("mast_shape")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Mast"]
+mesh = SubResource("mast_mesh")
+material_override = SubResource("mast_mat")
+
+[node name="TopPlatform" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 23.4, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TopPlatform"]
+shape = SubResource("top_shape")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="TopPlatform"]
+mesh = SubResource("top_mesh")
+material_override = SubResource("pad_mat")
+
+[node name="Spire" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 25.8, 0)
+mesh = SubResource("spire_mesh")
+material_override = SubResource("spire_mat")
+
+[node name="DepositGround" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 1.5, -3)
+script = ExtResource("2_deposit")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="DepositGround"]
+mesh = SubResource("deposit_mesh")
+material_override = SubResource("deposit_mat")
+
+[node name="DepositTop" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 24.6, 0)
+script = ExtResource("2_deposit")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="DepositTop"]
+mesh = SubResource("deposit_mesh")
+material_override = SubResource("deposit_mat")
